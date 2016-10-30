@@ -1,0 +1,6 @@
+#!/bin/bash
+
+NOTIF_1="[*]Starting gunicorn..."
+
+echo "$(tput setaf 1) $(tput bold) $NOTIF_1"
+gunicorn --workers 3 --bind 0.0.0.0:8080 --name $NOTIF_1 --user www-data --group www-data --access-logfile /server/log/gunAccess.log --error-logfile /server/log/gunError.log

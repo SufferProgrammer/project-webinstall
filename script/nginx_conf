@@ -1,0 +1,29 @@
+upstream app_server {
+
+    server localhost:8080 fail_timeout=0;
+
+    }
+
+    server {
+        listen       80;
+        server_name  pii-chan.tk;
+
+        root /server/file;
+        client_max_body_size 2G;
+        keepalive_timeout 5;
+        proxy_read_timeout 900;
+        access_log /server/log/ngAccess.log;
+        error_log /server/log/ngError.log;
+
+        location / {
+            try_files $uri @app;
+        }
+
+        location @app {
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP	$remote_addr;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_pass http://app_server;
+            }
+    }
